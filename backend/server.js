@@ -2,26 +2,20 @@ const express = require("express");
 const { chats } = require("./data/data.js");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
-
-const app = express();
+const userRoutes = require("./routes/userRoutes.js");
 
 //.env'yi ayarlamak için şart
 dotenv.config();
 connectDB();
+const app = express();
+
+app.use(express.json()); //JSON verisini kabul etmesi için.
 
 app.get("/", (req, res) => {
   res.send("API Başarılı Bir Şekilde Çalışıyor.");
 });
 
-app.get("/api/chat", (req, res) => {
-  res.send(chats);
-});
-
-app.get("/api/chat/:id", (req, res) => {
-  //chat ekranını yakalıyoruz.
-  const singleChat = chats.find((c) => c._id === req.params.id); //request'imiz
-  res.send(singleChat);
-});
+app.use("/api/user", userRoutes);
 
 const PORT = process.env.PORT || 5000;
 
