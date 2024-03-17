@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const chatModel = mongoose.Schema({
+const chatSchema = mongoose.Schema({
   chatName: { type: "string", trim: "true" },
   isGroupChat: { type: "boolean", default: false },
   users: [
@@ -20,6 +20,6 @@ const chatModel = mongoose.Schema({
   timestamps: true,
 });
 
-const Chat = mongoose.model("Chat", chatModel);
+const Chat = mongoose.model("Chat", chatSchema);
 
 module.exports = Chat;
