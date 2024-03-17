@@ -50,7 +50,6 @@ const Signup = () => {
       <FormControl id="sifre" isRequired>
         <FormLabel>Şifre Doğrula</FormLabel>
         <Input
-          placeholder="*************"
           type="password"
           onChange={(e) => {
             setPassword(e.target.value);
