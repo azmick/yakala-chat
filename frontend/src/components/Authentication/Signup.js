@@ -6,6 +6,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { useToast } from "@chakra-ui/react";
 
 const Signup = () => {
   const [name, setName] = useState();
@@ -13,10 +14,53 @@ const Signup = () => {
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
 
-  const postDetails = (pics) => {};
+  const postDetails = (pics) => {
+    setLoading(true);
+    if (pics === undefined) {
+      toast({
+        title: "Lütfen bir resim seçin.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
 
-  const submitHandler = (e) => {};
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "yakala_chat");
+      data.append("cloud_name", "dbexlg1ze");
+      fetch("https://api.cloudinary.com/v1_1/dbexlg1ze/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPic(data.url.toString());
+          console.log(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Lütfen bir resim seçin.",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
+      return;
+    }
+  };
+
+  const submitHandler = async () => {};
 
   return (
     <VStack spacing="5px">
@@ -72,6 +116,7 @@ const Signup = () => {
         width="100%"
         style={{ marginTop: 15 }}
         onClick={submitHandler}
+        isLoading={loading}
       >
         Üye Ol
       </Button>
